@@ -124,14 +124,18 @@ module.exports = {
             },
             processResults: function (data) {
                 if(!data || !data.success) return [];
-                return {
-                    results: $.map(data.success, function (item) {
-                        return {
-                            text: item.${field.name},
-                            id: item.${field.name},
-                        }
-                    })
-                };
+                const items = $.map(data.success, function (item) {
+                    return {
+                        text: item.${field.name},
+                        id: item.${field.name},
+                    }
+                });
+                items.sort((a, b) => {
+                    if (a.text.length !== b.text.length) 
+                        return a.text.length - b.text.length;
+                    return a.text.localeCompare(b.text);
+                });
+                return { results: items };
               }},`
                 : ""
             }

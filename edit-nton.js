@@ -170,6 +170,9 @@ const run = async (
   const { rows, possibles } = await get_rows_query(id);
   if (!rows[0]) return "No row selected";
   possibles.sort((a, b) => {
+    const lenA = (a?.length ?? 0);
+    const lenB = (b?.length ?? 0);
+    if (lenA !== lenB) return lenA - lenB;
     const fa = a?.toLowerCase?.();
     const fb = b?.toLowerCase?.();
     return fa > fb ? 1 : fb > fa ? -1 : 0;

@@ -207,14 +207,18 @@ const select2 = {
             processResults: function (data, q) {
                 const term = q.term
                 if(!data || !data.success) return [];
-                return {
-                    results: $.map(data.success${attrs.match_beginning ? `.filter(item=>item.${field.attributes.summary_field}.toString().toLowerCase().startsWith(term.toLowerCase()))` : ""}, function (item) {
-                        return {
-                            text: item.${field.attributes.summary_field},
-                            id: item["${table ? table.pk_name : "id"}"],
-                        }
-                    })
-                };
+                let items = $.map(data.success${attrs.match_beginning ? `.filter(item=>item.${field.attributes.summary_field}.toString().toLowerCase().startsWith(term.toLowerCase()))` : ""}, function (item) {
+                    return {
+                        text: item.${field.attributes.summary_field},
+                        id: item["${table ? table.pk_name : "id"}"],
+                    }
+                });
+                items.sort((a, b) => {
+                    if (a.text.length !== b.text.length) 
+                        return a.text.length - b.text.length;
+                    return a.text.localeCompare(b.text);
+                });
+                return { results: items };
               }},`
             : ""
         }
